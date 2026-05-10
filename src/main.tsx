@@ -1,20 +1,26 @@
-// Intercept Circle API calls and route through our proxy
-const originalFetch = window.fetch
+// Intercept Circle API calls — must be first
+const _originalFetch = window.fetch.bind(window)
 window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
-  const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
+  const url = typeof input === 'string'
+    ? input
+    : input instanceof URL
+    ? input.href
+    : (input as Request).url
+
   if (url.includes('api.circle.com')) {
-    const newUrl = url.replace('https://api.circle.com', 'http://localhost:3001/circle-api')
-    const newInit = {
-      ...init,
-      headers: {
-        ...Object.fromEntries(
-          Object.entries(init?.headers || {}).filter(([k]) => k.toLowerCase() !== 'x-user-agent')
-        ),
-      },
+    const proxyUrl = url.replace('https://api.circle.com', '/circle-proxy')
+    const cleanHeaders: Record<string, string> = {}
+    if (init?.headers) {
+      const entries = init.headers instanceof Headers
+        ? Array.from(init.headers.entries())
+        : Object.entries(init.headers as Record<string, string>)
+      for (const [k, v] of entries) {
+        if (k.toLowerCase() !== 'x-user-agent') cleanHeaders[k] = v
+      }
     }
-    return originalFetch(newUrl, newInit)
+    return _originalFetch(proxyUrl, { ...init, headers: cleanHeaders })
   }
-  return originalFetch(input, init)
+  return _originalFetch(input, init)
 }
 import { Buffer as BufferPolyfill } from 'buffer'
 ;(globalThis as any).Buffer = BufferPolyfill
