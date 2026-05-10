@@ -30,15 +30,15 @@ export function useSwap() {
       ] as const).map((c) => resolveChainIdentifier(c)).filter(Boolean)
 
       const adapter = new ViemAdapter(
-        {
-          getWalletClient: () => Promise.resolve(walletClient as any),
-          getPublicClient: (_params: any) => publicClient as any,
-        },
-        {
-          addressContext: 'user-controlled',
-          supportedChains: supportedChains as any,
-        }
-      )
+  {
+    getWalletClient: () => Promise.resolve(walletClient as any),
+    getPublicClient: (_params: any) => publicClient as any,
+  },
+  {
+    addressContext: 'user-controlled',
+    supportedChains: supportedChains as any,
+  }
+)
 
       const kit = new AppKit({
   baseUrl: 'https://radon-dapp.vercel.app',
