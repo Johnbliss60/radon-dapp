@@ -41,8 +41,8 @@ export function useSwap() {
       )
 
       const kit = new AppKit({
-        baseUrl: 'http://localhost:5173',
-      } as any)
+  baseUrl: 'https://radon-dapp.vercel.app',
+} as any)
 
       const tx = await kit.swap({
         from: { adapter, chain: params.chain as any },
