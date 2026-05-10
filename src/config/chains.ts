@@ -21,8 +21,14 @@ const arcTestnet = {
   network: 'arc-testnet',
   nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
   rpcUrls: {
-    default: { http: ['https://rpc.testnet.arc.network', 'https://api.testnet.arc.network'] },
-    public:  { http: ['https://rpc.testnet.arc.network', 'https://api.testnet.arc.network'] },
+    default: { http: [
+      'https://arc-testnet.drpc.org',
+      'https://rpc.testnet.arc.network',
+    ]},
+    public: { http: [
+      'https://arc-testnet.drpc.org',
+      'https://rpc.testnet.arc.network',
+    ]},
   },
   blockExplorers: {
     default: { name: 'ArcScan', url: 'https://testnet.arcscan.app' },
